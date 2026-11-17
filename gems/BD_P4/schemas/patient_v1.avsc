@@ -1,9 +1,0 @@
-{
-  "type": "record",
-  "name": "Patient",
-  "fields": [
-    { "name": "patient_id", "type": "int" },
-    { "name": "patient_name", "type": "string" },
-    { "name": "age", "type": "int" }
-  ]
-}
