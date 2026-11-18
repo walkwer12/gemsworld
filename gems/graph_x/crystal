@@ -1,0 +1,110 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+mkdir project
+mkdir data
+mkdir src
+mkdir src\main
+mkdir src\main\scala
+
+
+create build.sbt 
+
+Create project/build.properties.
+Paste:
+sbt.version=1.10.10
+
+6. Create data/vertices.csv.
+7. Create data/edges.csv.
+8. Create src/main/scala/GraphXPageRank.scala.
+
+java -version
+sbt --version
+
+sbt clean
+sbt update
+sbt compile
+sbt run 
