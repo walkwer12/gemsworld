@@ -1,0 +1,103 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+A. Initial setup – One-time checks
+Open PowerShell.
+
+python --version
+java -version
+python -m pip show pyspark
+Check Hadoop configuration:
+echo $env:HADOOP_HOME
+
+
+Confirm:
+•	Python is installed.
+•	Java is accessible.
+•	PySpark version is 4.2.0.
+No need to reinstall PySpark if everything is working.
+
+B. Create project folder
+mkdir BD_P1
+cd BD_P1
+
+Open this folder in VS Code.
+Create two files:
+skew.py
+fix.py
+
+Copy the respective programs into them and save.
+
+C. Execute original program
+
+PowerShell – Terminal 1
+
+python skew.py
+
+Wait until you see:
+GROUP BY completed!
+Open Spark UI:
+http://localhost:4040
+Keep this terminal running.
+
+Browser
+Open:
+http://localhost:4040
+Inspect Jobs, Stages and task execution.
+The program waits 120 seconds before stopping.
+
+
+D. Execute optimized program
+After the first program finishes:
+
+PowerShell – Terminal 1
+
+python fix.py
+
+Wait until:
+Running fixed Spark job...
+FIXED JOB COMPLETED!
+Open: http://localhost:4040
+Browser
+Open:
+http://localhost:4040
+Inspect the optimized job.
+E. Successful execution checklist
+•	Spark session starts.
+•	Five million records are generated.
+•	Skewed data is created.
+•	Key distribution displays key 0 with 4.5 million records.
+•	Original GROUP BY completes.
+•	Spark UI opens at port 4040.
+•	Fixed program completes.
+•	Optimized Spark job appears in Spark UI.
+F. Troubleshooting
+
+
+Error	What to do
+ModuleNotFoundError: pyspark	Run python -m pip install pyspark using the same Python interpreter.
+
+JAVA_HOME is not set	Check Java installation and JAVA_HOME configuration.
+
+Winutils.exe error	Check your existing C:\hadoop\bin configuration. Don't reinstall Hadoop immediately.
+
+Port 4040 already in use	Close the previous Spark application before starting another.
+
+Spark UI unavailable	Confirm the program is still running and check its terminal output.
+
+Program exits too quickly	Ensure time.sleep(120) is present.
+
+PySpark version mismatch	Check python -m pip show pyspark and ensure you are using the intended interpreter.
+
+Important: Run skew.py and fix.py separately. Don't try to execute both simultaneously.

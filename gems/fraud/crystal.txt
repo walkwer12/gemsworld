@@ -1,0 +1,208 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+java -version 
+javac -version
+mvn -version
+create pom.xml
+create src\main\java\FraudDetectionJob.java
+mvn clean compile
+mvn dependency:build-classpath "-Dmdep.outputFile = classpath.txt"
+$cp = Get-Content .\classpath.txt - Raw
+java -cp "target\classes;$cp" FraudDetectionJob
+
+
+
+
+Implement a Flink application that detects potentially fraudulent transactions by identifying two large transactions (₹10,000 or more) made by the same customer within one minute using KeyedProcessFunction.
+A. Initial setup – One-time checks
+Open PowerShell.
+Check Java:
+java --version
+
+Check Java compiler:
+javac -version
+
+Check Maven:
+mvn -version
+
+Confirm:
+•	Java 17 is installed and accessible.
+•	Java compiler (javac) is working.
+•	Maven is installed and accessible.
+•	Maven is using the intended Java installation.
+Important: This practical uses Java and Maven, not Python or PySpark. Do not install PySpark or Hadoop for this practical.
+
+Required versions:
+Software	Version
+Java	17
+Apache Flink	1.19.2
+Maven	Installed
+
+B. Create project folder
+Open PowerShell.
+mkdir BD_P6
+cd BD_P6
+
+Open this folder in VS Code.
+Create the following folder structure:
+BD_P6
+│
+├── pom.xml
+│
+└── src
+    └── main
+        └── java
+            └── FraudDetectionJob.java
+
+Create the folders using PowerShell:
+mkdir src
+mkdir src\main
+mkdir src\main\java
+
+Create the two files:
+New-Item pom.xml -ItemType File
+New-Item src\main\java\FraudDetectionJob.java -ItemType File
+
+Copy the following into the respective files:
+1.	Your journal's Maven configuration into pom.xml.
+2.	Your complete Java program into FraudDetectionJob.java.
+
+Important Maven settings:
+•	Java compiler release: 17
+•	Flink version: 1.19.2
+•	Dependencies: flink-streaming-java and flink-clients
+•	Include the Maven compiler plugin and exec plugin as shown in your journal.
+C. Download dependencies and compile the program
+Make sure PowerShell is currently inside BD_P6.
+
+Run:
+mvn clean compile
+
+This command:
+•	Removes previous compiled files.
+•	Downloads the required dependencies if they are not already available.
+•	Compiles FraudDetectionJob.java.
+
+Wait until you see:
+BUILD SUCCESS
+Important: Do not proceed if Maven reports compilation errors.
+
+D. Build classpath and execute the program
+After successful compilation, run the following commands in the same PowerShell terminal.
+
+Step 1 – Build dependency classpath
+mvn dependency:build-classpath "-Dmdep.outputFile=classpath.txt"
+
+This creates classpath.txt containing the paths of the required Flink libraries.
+
+Step 2 – Load the classpath
+$cp = Get-Content .\classpath.txt -Raw
+
+This stores the dependency paths in the PowerShell variable $cp.
+
+Step 3 – Execute the Java program
+java -cp "target\classes;$cp" FraudDetectionJob
+
+Wait for the program to finish.
+
+Expected output:
+The program should generate two fraud alerts:
+FRAUD ALERT: Customer=C101, Previous=₹15000.0, Current=₹20000.0, Gap=35 seconds
+FRAUD ALERT: Customer=C101, Previous=₹20000.0, Current=₹18000.0, Gap=45 seconds
+
+The exact console formatting may include additional Flink logging information.
+E. Successful execution checklist
+•	Java 17 is accessible.
+•	Java compiler is working.
+•	Maven is installed.
+•	Project folder BD_P6 is created.
+•	Correct Maven project structure is created.
+•	pom.xml contains Flink 1.19.2 dependencies.
+•	FraudDetectionJob.java is saved in the correct location.
+•	mvn clean compile completes successfully.
+•	classpath.txt is generated.
+•	Classpath is loaded into $cp.
+•	Java program executes successfully.
+•	Two fraud alerts are generated for customer C101.
+•	The program completes without errors.
+
+F. Troubleshooting
+Error	What to do
+java is not recognized	Check Java installation and PATH configuration.
+
+javac is not recognized	Check whether JDK 17 is installed and configured correctly.
+
+mvn is not recognized	Install Apache Maven and configure its PATH.
+
+Maven cannot download dependencies	Check internet connectivity and retry mvn clean compile.
+
+Non-parseable POM	Check pom.xml for missing tags, incorrect closing tags or XML errors.
+
+Source option or target release error	Confirm that Java 17 JDK is installed and Maven is using it.
+
+package org.apache.flink does not exist	Check Flink dependencies in pom.xml, then rerun mvn clean compile.
+
+Could not find or load main class FraudDetectionJob	Check that the file is named FraudDetectionJob.java, has no unexpected package declaration and is inside src\main\java.
+
+Could not find or load main class after compilation	Run the classpath commands again and verify target\classes\FraudDetectionJob.class exists.
+
+No fraud alerts generated	Check the transaction amounts, customer IDs, timestamps and 60,000 ms condition.
+
+Only one or zero alerts	Verify that the sample transactions have not been modified.
+
+Maven build fails	Read the first meaningful error in the PowerShell output before retrying.
+
+Important points
+
+2.	Use Java 17 and Flink 1.19.2.
+3.	Do not change the Maven dependency versions unnecessarily.
+4.	Ensure the filename and public class name are both FraudDetectionJob.
+5.	Run the commands in the specified order.
+6.	The practical uses seven predefined transactions through env.fromData(). It does not require a live transaction feed.
+7.	The expected result is two fraud alerts, both belonging to C101.
+8.	env.execute() starts the Flink job; the program terminates after processing the finite sample data.
+
+Most important code to remember for the examination:
+keyBy(tx -> tx.customerId)
+    .process(new FraudDetector())
+    .print();
+env.execute("Fraud Detection Job");
+
+Fraud detection logic to memorise:
+FILTER → RETRIEVE → COMPARE → ALERT → UPDATE

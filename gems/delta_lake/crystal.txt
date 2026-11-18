@@ -1,0 +1,156 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+python --version
+java -version
+pip show pyspark
+pip show delta-spark
+echo $env:HADOOP_HOME
+python delta_lake.py
+
+
+
+
+
+A. Initial setup – One-time checks
+Open PowerShell.
+
+Check Python:
+python --version
+
+Check Java:
+java -version
+
+Check PySpark:
+python -m pip show pyspark
+
+Check Delta Lake:
+python -m pip show delta-spark
+
+Check Hadoop configuration:
+echo $env:HADOOP_HOME
+
+Check Python configuration:
+echo $env:PYSPARK_PYTHON
+echo $env:PYSPARK_DRIVER_PYTHON
+
+Confirm:
+•	Python is installed.
+•	Java is accessible.
+•	Hadoop configuration is available if required by your existing Windows setup.
+•	PySpark and Delta Lake versions are compatible.
+
+Important: Your journal shows PySpark 4.2.0 and Delta Lake 4.0.0. These are not a documented compatible combination. Do not blindly reinstall anything. Verify the versions and settle on a compatible combination before proceeding.
+If a compatible installation is required, use the following only after confirming the selected versions:
+python -m pip install pyspark==4.0.0 delta-spark==4.0.0
+
+B. Create project folder
+Open PowerShell.
+mkdir BD_P2
+cd BD_P2
+
+Open this folder in VS Code.
+Create one file:
+delta_lake.py
+
+Copy the complete corrected Practical 2 program into it and save.
+
+C. Execute the program
+PowerShell – Terminal 1
+Make sure you are inside the BD_P2 folder.
+Run:
+python delta_lake.py
+
+Wait for the following outputs:
+Spark started successfully!
+Original Student Data:
+Delta Lake table created successfully!
+Updated Student Data:
+Transaction History:
+Original Student Data - Version 0:
+Finally:
+Practical completed successfully!
+D. Verify Delta Lake operations
+Check the following outputs in the terminal.
+1. Original student data
+ABC should have 90 marks.
+2. Updated student data
+ABC should have 95 marks.
+3. Transaction history
+Confirm that the history contains:
+Version	Operation
+0	WRITE
+1	UPDATE
+4. Time Travel
+The Version 0 output should show ""'s original marks as 90.
+This confirms that Time Travel is working.
+5. Delta table folder
+The program automatically creates:
+BD_P2
+│
+├── delta_lake.py
+│
+└── student_delta
+    │
+    ├── _delta_log
+    │
+    └── part-....parquet
+
+The _delta_log folder contains transaction history, and the Parquet files contain the actual data.
+E. Successful execution checklist
+•	Python and Java are accessible.
+•	Compatible PySpark and Delta Lake versions are installed.
+•	Spark session starts successfully.
+•	Six student records are created.
+•	Student DataFrame displays correctly.
+•	Delta Lake table is created.
+•	student_delta folder is generated.
+•	_delta_log folder is generated.
+•	marks are updated from 90 to 95.
+•	Transaction history displays Version 0 and Version 1.
+•	Time Travel retrieves Version 0.
+•	Original marks of 90 are displayed.
+•	Spark stops successfully.
+F. Troubleshooting
+
+Error	What to do
+ModuleNotFoundError: pyspark	Run python -m pip install pyspark using the intended Python interpreter, with a compatible version.
+
+ModuleNotFoundError: delta	Install the compatible delta-spark package using python -m pip.
+
+JAVA_GATEWAY_EXITED	Check Java installation and JAVA_HOME configuration.
+
+ClassNotFoundException	Check Delta Lake and Spark compatibility and dependency configuration.
+
+Winutils.exe error	Check your existing C:\hadoop\bin configuration. Don't reinstall Hadoop immediately.
+
+Python worker error	Check PYSPARK_PYTHON and PYSPARK_DRIVER_PYTHON.
+
+Delta table not found	Check the student_delta folder and its path.
+
+Version not found	Check whether Version 0 exists in the Delta transaction history.
+
+Concurrent modification error	Check for other processes modifying the same Delta table.
+
+Old data not available	Check transaction log and data-file retention; avoid running VACUUM on the demonstration table.
+
+Important points:
+2.	The program automatically deletes and recreates the student_delta demonstration folder on each fresh run.
+3.	Do not store important data inside that folder.
+4.	No separate Spark UI inspection or browser is required for this practical.
+5.	Run the program once from beginning to end to demonstrate table creation, update, transaction history and Time Travel.
