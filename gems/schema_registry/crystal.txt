@@ -1,0 +1,73 @@
+
+Create this folder structure:
+BD_P4/
+│
+├── docker-compose.yml
+├── Producer_v1.py
+├── producer_v2.py
+├── consumer.py
+│
+└── schemas/
+    ├── patient_v1.avsc
+    └── patient_v2.avsc
+Create the schemas folder:
+mkdir schemas
+
+python --version
+docker --version
+docker compose version
+docker info
+python -m pip show confluent-kafka
+
+If confluent-kafka is not installed:
+python -m pip install confluent-kafka
+
+4. Start Docker containers
+docker compose up -d
+docker compose ps
+
+Check container logs:
+docker logs kafka
+docker logs schema-registry
+
+5. Check Schema Registry
+Invoke-RestMethod http://localhost:8081/subjects
+
+6. Set compatibility to BACKWARD
+Invoke-RestMethod -Method Put `
+  -Uri http://localhost:8081/config `
+  -ContentType "application/vnd.schemaregistry.v1+json" `
+  -Body '{"compatibility":"BACKWARD"}'
+
+Verify:
+Invoke-RestMethod http://localhost:8081/config
+
+7. Start the consumer
+Open a second PowerShell terminal:
+python consumer.py
+Keep it running.
+
+8. Execute Producer V1
+Open a third PowerShell terminal:
+
+python Producer_v1.py
+Expected: Two V1 patient records are produced. The consumer should receive them with blood_group as None.
+
+9. Execute Producer V2
+In the third terminal:
+python producer_v2.py
+Expected: Two V2 patient records are produced. The consumer should receive them with their blood groups.
+
+10. Verify registered schemas
+Open another PowerShell terminal:
+Invoke-RestMethod http://localhost:8081/subjects
+Invoke-RestMethod http://localhost:8081/subjects/healthcare-patients-value/versions
+Invoke-RestMethod http://localhost:8081/config/healthcare-patients-value
+Invoke-RestMethod http://localhost:8081/subjects/healthcare-patients-value/versions/2
+
+11. Stop the consumer
+In the consumer terminal, press:
+CTRL + C
+
+12. Shut down Docker
+docker compose down
