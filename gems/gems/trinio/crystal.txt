@@ -1,0 +1,234 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+docker --version
+docker compose version
+docker info
+mkdir mysql
+mkdir etc
+mkdir etc\catalog
+Create these three files:
+1.	docker-compose.yaml
+2.	mysql\init.sql
+3.	etc\catalog\mysql.properties
+docker compose config
+docker compose up -d
+docker compose ps
+docker logs trino_mysql
+docker logs trino_coordinator
+docker exec -it trino_mysql mysql -uroot -proot123 -e "SELECT * FROM university.students;"
+docker exec -it trino_coordinator trino --server http://localhost:8080 --catalog mysql --schema university
+
+SHOW CATALOGS;
+
+SHOW SCHEMAS FROM mysql;
+
+SHOW TABLES FROM mysql.university;
+
+SELECT * FROM mysql.university.students;
+
+SELECT department, COUNT(*) AS total_students
+FROM mysql.university.students
+GROUP BY department;
+
+exit;
+
+docker compose down
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+A. Initial setup — One-time checks
+Open PowerShell.
+
+Check Docker:
+docker --version
+
+Check Docker Compose:
+docker compose version
+
+Check Docker engine:
+docker info
+
+Confirm:
+•	Docker Desktop is installed and running.
+•	Docker Compose is available.
+•	Docker engine is accessible.
+No need to install Python, Java, MySQL or Trino separately.
+
+B. Create project folder
+cd "$HOME\Desktop"
+mkdir BD_P9
+cd BD_P9
+
+Create folders:
+mkdir mysql
+mkdir etc
+mkdir etc\catalog
+
+Open VS Code:
+code .
+
+Create these three files:
+1.	docker-compose.yaml
+2.	mysql\init.sql
+3.	etc\catalog\mysql.properties
+
+Copy the corrected programs from Sections C above and save them.
+
+C. Validate and start Docker
+docker compose config
+docker compose up -d
+
+Check containers:
+docker compose ps
+
+Check MySQL:
+docker logs trino_mysql
+
+Check Trino:
+docker logs trino_coordinator
+
+D. Verify MySQL database
+Execute:
+docker exec -it trino_mysql mysql -uroot -proot123 -e "SELECT * FROM university.students;"
+Confirm that four student records appear.
+
+E. Connect to Trino
+Execute:
+docker exec -it trino_coordinator trino --server http://localhost:8080 --catalog mysql --schema university
+
+Wait for:
+trino:university>
+Execute the following SQL commands one at a time.
+1. Display catalogs
+SHOW CATALOGS;
+2. Display schemas
+SHOW SCHEMAS FROM mysql;
+3. Display tables
+SHOW TABLES FROM mysql.university;
+4. Retrieve student records
+SELECT * FROM mysql.university.students;
+5. Count students by department
+SELECT department, COUNT(*) AS total_students
+FROM mysql.university.students
+GROUP BY department;
+Exit Trino:
+exit;
+
+docker compose down
+
+F. Open Trino web interface
+Open your browser.
+Visit:
+http://localhost:8080
+Confirm that the Trino coordinator interface is accessible.
+G. Successful execution checklist
+•	Docker Desktop starts.
+•	Docker Compose validates.
+•	MySQL container starts.
+•	Trino coordinator starts.
+•	University database is created.
+•	Students table is created.
+•	Four records are inserted.
+•	Trino user is created.
+•	MySQL catalog is loaded.
+•	SHOW CATALOGS displays mysql.
+•	SHOW SCHEMAS displays university.
+•	SHOW TABLES displays students.
+•	SELECT returns four records.
+•	GROUP BY returns two students per department.
+•	Trino web interface opens.
+
+H. Troubleshooting
+Error	What to do
+Docker not recognized	Check Docker installation and PATH.
+Docker daemon unavailable	Start Docker Desktop.
+YAML error	Correct indentation in docker-compose.yaml.
+MySQL container fails	Inspect docker logs trino_mysql.
+Trino container fails	Inspect docker logs trino_coordinator.
+Access denied	Check MySQL username, password and grants.
+Catalog not found	Check mysql.properties filename and mount.
+Schema not found	Verify the university database exists.
+Table not found	Check MySQL initialization.
+Trino CLI unavailable	Check CLI location inside the container.
+Port conflict	Free port 8080 or 3307.
+Web interface unavailable	Check container status and Trino logs.
