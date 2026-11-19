@@ -1,0 +1,95 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+node -v
+npm -v 
+npm install -g truffle
+truffle version
+
+configure metamask with the rpc url from ganache and add private key to import an Account
+
+truffle init
+
+final folder structure needs to be: 
+contracts -> contract.sol 
+migrations -> 1_deploy.js
+frontend -> index.html & app.js
+truffle-config.js
+
+write solidity code. 
+
+Uncomment development and compilers in truffle.config.js and change evmVersion to paris
+
+Create migration file
+
+truffle compile 
+
+truffle migrate
+
+create frontend folder and write code. 
+
+replace contract address in app.js with the one received during truffle migrate

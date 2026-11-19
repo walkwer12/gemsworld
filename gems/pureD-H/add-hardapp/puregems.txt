@@ -1,0 +1,731 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+addition.sol
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+contract Addition {
+
+    function add(uint256 a, uint256 b)
+        public
+        pure
+        returns (uint256)
+    {
+        return a + b;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+hardhat.config.ts 
+
+import { defineConfig } from "hardhat/config";
+import hardhatEthers from "@nomicfoundation/hardhat-ethers";
+
+export default defineConfig({
+  plugins: [hardhatEthers],
+
+  solidity: {
+    version: "0.8.24",
+  },
+
+  networks: {
+    localhost: {
+      type: "http",
+      url: "http://127.0.0.1:8545",
+      chainId: 31337,
+    },
+  },
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+scripts -> deploy.js 
+
+import { ethers } from "ethers";
+import hre from "hardhat";
+import fs from "fs";
+
+async function main() {
+
+    const artifact = JSON.parse(
+        fs.readFileSync(
+            "./artifacts/contracts/Addition.sol/Addition.json",
+            "utf8"
+        )
+    );
+
+    const connection = await hre.network.connect();
+
+    const provider = new ethers.BrowserProvider(
+        connection.provider
+    );
+
+    const signer = await provider.getSigner();
+
+    const factory = new ethers.ContractFactory(
+        artifact.abi,
+        artifact.bytecode,
+        signer
+    );
+
+    const addition = await factory.deploy();
+
+    await addition.waitForDeployment();
+
+    console.log(
+        "Addition contract deployed to:",
+        await addition.getAddress()
+    );
+}
+
+main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+index.html
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Addition DApp</title>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Addition DApp</h1>
+
+        <p>Enter two numbers and calculate their sum using Solidity.</p>
+
+        <button id="connectButton">Connect MetaMask</button>
+
+        <br><br>
+
+        <div class="box">
+
+            <input
+                type="number"
+                id="num1"
+                placeholder="Enter first number"
+            >
+
+            <br><br>
+
+            <input
+                type="number"
+                id="num2"
+                placeholder="Enter second number"
+            >
+
+            <br><br>
+
+            <button id="addButton">ADD</button>
+
+            <div id="result">Result: --</div>
+
+        </div>
+
+        <p id="status"></p>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.5/dist/ethers.umd.min.js"></script>
+    <script src="app.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.js code
+const contractAddress = "0xfA69E46E705c207E8415216f71d6872C55f29a67";
+
+const contractABI = [
+    "function add(uint256 a, uint256 b) public pure returns (uint256)"
+];
+
+let provider;
+let signer;
+let contract;
+
+const connectButton = document.getElementById("connectButton");
+const addButton = document.getElementById("addButton");
+const status = document.getElementById("status");
+const result = document.getElementById("result");
+
+connectButton.addEventListener("click", async () => {
+
+    if (!window.ethereum) {
+        alert("Please install MetaMask!");
+        return;
+    }
+
+    try {
+
+        // Connect wallet
+        await window.ethereum.request({
+            method: "eth_requestAccounts"
+        });
+
+        // Switch to Hardhat Local
+        try {
+
+            await window.ethereum.request({
+                method: "wallet_switchEthereumChain",
+                params: [
+                    { chainId: "0x7a69" }
+                ]
+            });
+
+        } catch (switchError) {
+
+            if (switchError.code === 4902) {
+
+                await window.ethereum.request({
+                    method: "wallet_addEthereumChain",
+                    params: [{
+                        chainId: "0x7a69",
+                        chainName: "Hardhat Local",
+                        nativeCurrency: {
+                            name: "Ether",
+                            symbol: "ETH",
+                            decimals: 18
+                        },
+                        rpcUrls: ["http://127.0.0.1:8545"]
+                    }]
+                });
+
+            } else {
+                throw switchError;
+            }
+        }
+
+        // Create provider
+        provider = new ethers.BrowserProvider(window.ethereum);
+
+        // Verify network
+        const network = await provider.getNetwork();
+
+        console.log("Connected Chain ID:", network.chainId.toString());
+
+        if (network.chainId.toString() !== "31337") {
+            status.innerText = "Wrong network!";
+            return;
+        }
+
+        // Get signer
+        signer = await provider.getSigner();
+
+        // Create contract
+        contract = new ethers.Contract(
+            contractAddress,
+            contractABI,
+            signer
+        );
+
+        const address = await signer.getAddress();
+
+        status.innerText = "Connected: " + address;
+
+    } catch (error) {
+
+        console.error(error);
+
+        status.innerText =
+            "Connection failed: " +
+            (error.shortMessage || error.message);
+    }
+});
+
+
+// Add two numbers
+addButton.addEventListener("click", async () => {
+
+    if (!contract) {
+        alert("Please connect MetaMask first!");
+        return;
+    }
+
+    const num1 = document.getElementById("num1").value;
+    const num2 = document.getElementById("num2").value;
+
+    if (num1 === "" || num2 === "") {
+        alert("Please enter both numbers!");
+        return;
+    }
+
+    try {
+
+        result.innerText = "Calculating...";
+
+        const answer = await contract.add(
+            BigInt(num1),
+            BigInt(num2)
+        );
+
+        result.innerText = "Result: " + answer.toString();
+
+    } catch (error) {
+
+        console.error(error);
+
+        result.innerText =
+            "Error: " + (error.shortMessage || error.message);
+    }
+});

@@ -1,0 +1,381 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+contract.sol 
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract Contract {
+
+    function isPrime(uint256 n) public pure returns (bool) {
+
+        if (n < 2) {
+            return false;
+        }
+
+        for (uint256 i = 2; i < n; i++) {
+
+            if (n % i == 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+
+---------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1_deploy.js 
+
+const Contract = artifacts.require("Contract");
+
+module.exports = function (deployer) {
+    deployer.deploy(Contract);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+index.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Prime Number DApp</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+</head>
+
+<body>
+
+    <h1>Prime Number Checker</h1>
+
+    <label>Enter a number:</label>
+    <input type="number" id="num">
+
+    <br><br>
+
+    <button onclick="checkPrime()">Check Prime</button>
+
+    <br><br>
+
+    <p>Result: <span id="result"></span></p>
+
+    <script src="app.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.js code
+
+let web3;
+let contract;
+
+const contractAddress = "0xfA69E46E705c207E8415216f71d6872C55f29a67";
+
+const contractABI = [
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "n",
+                "type": "uint256"
+            }
+        ],
+        "name": "isPrime",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "pure",
+        "type": "function"
+    }
+];
+
+async function checkPrime() {
+
+    try {
+
+        // Connect Web3
+        if (typeof window.ethereum === "undefined") {
+            alert("Please install MetaMask");
+            return;
+        }
+
+        web3 = new Web3(window.ethereum);
+
+        // Request MetaMask account
+        const accounts = await window.ethereum.request({
+            method: "eth_requestAccounts"
+        });
+
+        console.log("Account:", accounts[0]);
+
+        // Create contract
+        contract = new web3.eth.Contract(
+            contractABI,
+            contractAddress
+        );
+
+        // Get number
+        const num = document.getElementById("num").value;
+
+        if (num === "" || !Number.isInteger(Number(num)) || Number(num) < 0) {
+            alert("Enter a valid whole number");
+            return;
+        }
+
+        // Call smart contract
+        const result = await contract.methods
+            .isPrime(num)
+            .call();
+
+        if (result) {
+            document.getElementById("result").innerText =
+                "Prime Number";
+        } else {
+            document.getElementById("result").innerText =
+                "Not a Prime Number";
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Error: " + error.message);
+    }
+}

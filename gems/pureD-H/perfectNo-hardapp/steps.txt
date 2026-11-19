@@ -1,0 +1,127 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+npm init
+npm install hardhat
+npx hardhat --version
+npx hardhat --init
+npm install --save-dev ethers @nomicfoundation/hardhat-ethers
+
+inside contracts write contract code
+
+replace contents of hardhat.config.ts
+
+inside scripts folder create deploy.js and paste code
+
+npx hardhat compile 
+
+npx hardhat node 
+
+npx hardhat run scripts/deploy.js --network localhost
+
+open metamask 
+Networks → Add network → Add a network manually
+
+Enter:
+Network name	Hardhat Local
+RPC URL	http://127.0.0.1:8545
+Chain ID	31337
+Currency symbol	ETH
+
+
+then import an account using one of the private keys
+
+create frontend -> index and app

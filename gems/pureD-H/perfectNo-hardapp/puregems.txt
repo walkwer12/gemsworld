@@ -1,0 +1,746 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PerfectNumber.sol 
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.21;
+
+contract PerfectNumber {
+
+    function checkPerfect(uint256 n)
+        public
+        pure
+        returns (bool)
+    {
+
+        if (n < 2) {
+            return false;
+        }
+
+        uint256 sum = 1;
+
+        for (uint256 i = 2; i <= n / i; i++) {
+
+            if (n % i == 0) {
+
+                sum += i;
+
+                uint256 other = n / i;
+
+                if (other != i) {
+                    sum += other;
+                }
+            }
+        }
+
+        return sum == n;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+hardhat config ts 
+
+import { defineConfig } from "hardhat/config";
+import hardhatEthers from "@nomicfoundation/hardhat-ethers";
+
+export default defineConfig({
+
+    plugins: [hardhatEthers],
+
+    solidity: {
+        version: "0.8.28",
+    },
+
+    networks: {
+        localhost: {
+            type: "http",
+            url: "http://127.0.0.1:8545",
+            chainId: 31337,
+        },
+    },
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+scrips -> deploy.js 
+
+import { ethers } from "ethers";
+import hre from "hardhat";
+import fs from "fs";
+
+async function main() {
+
+    const artifact = JSON.parse(
+        fs.readFileSync(
+            "./artifacts/contracts/PerfectNumber.sol/PerfectNumber.json",
+            "utf8"
+        )
+    );
+
+    const connection = await hre.network.connect();
+
+    const provider = new ethers.BrowserProvider(
+        connection.provider
+    );
+
+    const signer = await provider.getSigner();
+
+    const factory = new ethers.ContractFactory(
+        artifact.abi,
+        artifact.bytecode,
+        signer
+    );
+
+    const perfectNumber = await factory.deploy();
+
+    await perfectNumber.waitForDeployment();
+
+    console.log(
+        "PerfectNumber contract deployed to:",
+        await perfectNumber.getAddress()
+    );
+}
+
+main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+index.html
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Perfect Number</title>
+</head>
+
+<body>
+
+    <h2>Perfect Number Program</h2>
+
+    <button id="connectButton">Connect MetaMask</button>
+
+    <p id="wallet">Wallet not connected</p>
+
+    <br><br>
+
+    <label for="numberInput">Enter a number:</label>
+
+    <input
+        type="number"
+        id="numberInput"
+        min="1"
+        step="1"
+    >
+
+    <br><br>
+
+    <button id="checkButton">Check</button>
+
+    <br><br>
+
+    <p id="result"></p>
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.5/dist/ethers.umd.min.js"></script>
+
+    <script src="app.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+app js code 
+
+const CONTRACT_ADDRESS = "0xfA69E46E705c207E8415216f71d6872C55f29a67";
+
+const ABI = [
+    "function checkPerfect(uint256 n) view returns (bool)"
+];
+
+let contract;
+
+
+// Connect MetaMask
+document.getElementById("connectButton").onclick = async function () {
+
+    try {
+
+        if (!window.ethereum) {
+            alert("Please install MetaMask!");
+            return;
+        }
+
+        const provider = new ethers.BrowserProvider(window.ethereum);
+
+        await provider.send("eth_requestAccounts", []);
+
+        const network = await provider.getNetwork();
+
+        if (network.chainId !== 31337n) {
+            alert("Please select Hardhat Local in MetaMask.");
+            return;
+        }
+
+        contract = new ethers.Contract(
+            CONTRACT_ADDRESS,
+            ABI,
+            provider
+        );
+
+        const signer = await provider.getSigner();
+
+        const address = await signer.getAddress();
+
+        document.getElementById("wallet").innerText =
+            "Connected: " + address;
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Could not connect to MetaMask.");
+    }
+};
+
+
+// Check perfect number
+document.getElementById("checkButton").onclick = async function () {
+
+    const result = document.getElementById("result");
+
+    const value = document.getElementById("numberInput").value;
+
+    if (!contract) {
+        alert("Connect MetaMask first!");
+        return;
+    }
+
+    if (value === "" || !/^\d+$/.test(value) || BigInt(value) < 1n) {
+
+        result.innerText = "Enter a positive whole number.";
+
+        return;
+    }
+
+    try {
+
+        result.innerText = "Checking...";
+
+        const n = BigInt(value);
+
+        const isPerfect = await contract.checkPerfect(n);
+
+        result.innerText = isPerfect
+            ? n.toString() + " is a perfect number!"
+            : n.toString() + " is not a perfect number.";
+
+    } catch (error) {
+
+        console.error("Contract call failed:", error);
+
+        result.innerText =
+            "Error calling the contract. Check the console.";
+    }
+};

@@ -1,0 +1,1987 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Aim: To implement a Solidity smart contract using a structure to store and retrieve
+student details such as student ID, name, and address.
+
+//SPDX-License-Identifier: MIT
+pragma solidity ^0.8.21;
+
+contract StudentDetails{
+    struct Student{
+        uint id;
+        string name;
+        uint age;
+    }
+
+    Student s; //Student structure object variable
+
+    function addStudent(uint s_id, string memory s_name, uint s_age) public{
+        s.id = s_id;
+        s.name = s_name;
+        s.age = s_age;
+    }
+
+    function getStudent() public view returns(uint, string memory, uint){
+        return (s.id, s.name, s.age);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+AIM 4 : To implement a Solidity smart contract to store employee details and to provide
+a function to increment the employee&#39;s salary.
+
+//SPDX-License-Identifier: MIT
+pragma solidity ^0.8.21;
+
+contract EmployeeDetails{
+    struct Employee{
+        uint id;
+        string name;
+        string designation;
+        uint salary;
+    }
+
+    Employee public e;
+
+    function addEmployee(uint e_id, string memory e_name, string memory e_designation, uint e_salary) public{
+        e.id = e_id;
+        e.name = e_name;
+        e.designation = e_designation;
+        e.salary = e_salary;
+    }
+
+    function incrementSalary(uint amt) public {
+        e.salary += amt;
+    }
+
+    function getEmployee() public view returns(uint, string memory, string memory, uint){
+        return (e.id, e.name, e.designation, e.salary);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Aim : Palindrome
+
+
+pragma solidity ^0.8.21;
+
+contract Palindrome {
+
+    function check(uint n) public pure returns (string memory) {
+
+        uint r;
+        uint rev = 0;
+        uint n1 = n;
+
+        while (n != 0) {
+
+            r = n % 10;
+            rev = rev * 10 + r;
+            n = n / 10;
+
+        }
+
+        if (rev == n1)
+            return "Palindrome";
+        else
+            return "Not Palindrome";
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Aim: User Account Structure and Transactions in Solidity
+
+//SPDX-License-Identifier:MIT
+pragma solidity ^0.8.21;
+
+contract UserAccount{
+    struct User{
+        uint id;
+        string name;
+        uint balance;
+    }
+
+    mapping(uint => User) public u;
+
+    function addAccount(uint u_id, string memory u_name, uint u_balance) public{
+        u[u_id] = User(u_id, u_name, u_balance);
+    }
+
+    function deposit(uint u_id, uint amt) public{
+        u[u_id].balance += amt;
+    }
+
+    function withdraw(uint u_id, uint amt) public{
+        require(amt <= u[u_id].balance, "Insufficient Balance");
+
+        u[u_id].balance -= amt;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Aim: Perfect Number
+
+
+ //SPDX-License-Identifier: MIT
+ pragma solidity ^0.8.21;
+
+ // Perfect Number
+
+ contract PerfectNumber {
+
+    function calcPerfectNum(uint num) public pure returns(bool) {
+
+        if (num <= 1) {
+            return false;
+        }
+
+        uint sum = 0;
+
+        for (uint i = 1; i <= num / 2; i++) {
+            if (num % i == 0) {
+                sum += i;
+            }
+        }
+
+        return sum == num;
+    }
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Aim: Voting Smart contract
+
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.21;
+
+contract voting {
+
+    string[] public cn;
+
+    constructor(string[] memory cdn) {
+        cn = cdn;
+    }
+
+    mapping(string => uint) public ct;
+    mapping(address => bool) public voters;
+
+    function vote(string memory c) public {
+
+        require(
+            !voters[msg.sender],
+            "you have alredy voted"
+        );
+
+        bool ce = false;
+
+        for (uint i = 0; i < cn.length; i++) {
+            if (
+                keccak256(bytes(c)) ==
+                keccak256(bytes(cn[i]))
+            ) {
+                ce = true;
+                break;
+            }
+        }
+
+        require(
+            ce,
+            "Condidate dows not exists"
+        );
+
+        ct[c]++;
+        voters[msg.sender] = true;
+    }
+
+    function getWinner()
+        public
+        view
+        returns (string memory)
+    {
+        string memory w;
+        uint t = 0;
+
+        for (uint i = 0; i < cn.length; i++) {
+
+            if (ct[cn[i]] > t) {
+                t = ct[cn[i]];
+                w = cn[i];
+            }
+        }
+
+        return w;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Aim: Transfer ether
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.21;
+
+contract BankC {
+
+    function deposit() public payable {
+        // Ether sent with the transaction is stored in the contract
+    }
+
+    function transferE(address payable r) public payable {
+
+        require(
+            address(this).balance >= msg.value,
+            "Insufficient balance"
+        );
+
+        r.transfer(msg.value);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Aim: Student Structure and grade management
+
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.21;
+
+contract StudentGrade {
+
+    // Student structure
+    struct Student {
+        uint id;
+        string name;
+        string s_address;
+        uint age;
+        uint[] marks;
+    }
+
+    // Mapping student ID => Student
+    mapping(uint => Student) public stud_id;
+
+    // Store student IDs
+    uint[] public studentIds;
+
+    // Total number of students
+    uint public studentCount;
+
+    // Add a student
+    function addStudent(
+        uint id,
+        string memory name,
+        string memory s_address,
+        uint age,
+        uint[] calldata marks
+    ) public {
+
+        // Prevent duplicate student IDs
+        require(
+            stud_id[id].id == 0,
+            "Student ID already exists"
+        );
+
+        // Store student details
+        stud_id[id] = Student(
+            id,
+            name,
+            s_address,
+            age,
+            marks
+        );
+
+        // Store ID separately
+        studentIds.push(id);
+
+        // Increase student count
+        studentCount++;
+    }
+
+    // Total number of students
+    function totalStudent()
+        public
+        view
+        returns (uint)
+    {
+        return studentCount;
+    }
+
+    // Display details of all students
+    function getAllStudents()
+        public
+        view
+        returns (Student[] memory)
+    {
+        Student[] memory allStudents =
+            new Student[](studentCount);
+
+        for (uint i = 0; i < studentCount; i++) {
+
+            uint id = studentIds[i];
+
+            allStudents[i] = stud_id[id];
+        }
+
+        return allStudents;
+    }
+
+    // Calculate grade of a student
+    function getGrade(uint id)
+        public
+        view
+        returns (string memory)
+    {
+        // Check that student exists
+        require(
+            stud_id[id].id != 0,
+            "Student does not exist"
+        );
+
+        uint[] memory marks = stud_id[id].marks;
+
+        // Prevent division by zero
+        if (marks.length == 0) {
+            return "No marks";
+        }
+
+        uint totalMarks = 0;
+
+        // Calculate total marks
+        for (uint i = 0; i < marks.length; i++) {
+            totalMarks += marks[i];
+        }
+
+        // Calculate average
+        uint averageMark =
+            totalMarks / marks.length;
+
+        // Grade calculation
+        if (averageMark >= 90) {
+            return "Grade: A+";
+        }
+        else if (averageMark >= 80) {
+            return "Grade: A";
+        }
+        else if (averageMark >= 70) {
+            return "Grade: B";
+        }
+        else if (averageMark >= 60) {
+            return "Grade: C";
+        }
+        else if (averageMark >= 50) {
+            return "Grade: D";
+        }
+        else {
+            return "Grade: F";
+        }
+    }
+
+    // Display details of a particular student
+    function displayDetail(uint id)
+        public
+        view
+        returns (
+            uint,
+            string memory,
+            string memory,
+            uint,
+            uint[] memory
+        )
+    {
+        // Check that student exists
+        require(
+            stud_id[id].id != 0,
+            "Student does not exist"
+        );
+
+        Student memory s = stud_id[id];
+
+        return (
+            s.id,
+            s.name,
+            s.s_address,
+            s.age,
+            s.marks
+        );
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aim: simple quiz program
+
+
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity ^0.8.21;
+
+contract Quiz {
+
+    struct Question {
+        string Qtest;
+        string CA;
+    }
+
+    Question[] public q;
+
+    uint public tc;
+    uint public tw;
+
+    event AnswerE(string qu, string uans, bool isc);
+
+    function add(
+        string memory qt,
+        string memory cans
+    ) public {
+        q.push(Question(qt, cans));
+    }
+
+    function ansQ(
+        uint i,
+        string memory uans
+    ) public {
+
+        require(i < q.length, "Invalid Question Index");
+
+        if (
+            keccak256(bytes(uans)) ==
+            keccak256(bytes(q[i].CA))
+        ) {
+            tc++;
+            emit AnswerE(q[i].Qtest, uans, true);
+        }
+        else {
+            tw++;
+            emit AnswerE(q[i].Qtest, uans, false);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aim : simple inheritance
+
+
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity ^0.8.21;
+
+contract Quiz {
+
+    struct Question {
+        string Qtest;
+        string CA;
+    }
+
+    Question[] public q;
+
+    uint public tc;
+    uint public tw;
+
+    event AnswerE(string qu, string uans, bool isc);
+
+    function add(
+        string memory qt,
+        string memory cans
+    ) public {
+        q.push(Question(qt, cans));
+    }
+
+    function ansQ(
+        uint i,
+        string memory uans
+    ) public {
+
+        require(i < q.length, "Invalid Question Index");
+
+        if (
+            keccak256(bytes(uans)) ==
+            keccak256(bytes(q[i].CA))
+        ) {
+            tc++;
+            emit AnswerE(q[i].Qtest, uans, true);
+        }
+        else {
+            tw++;
+            emit AnswerE(q[i].Qtest, uans, false);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aim : multiple inheritance
+
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.21;
+
+contract p1 {
+    string name;
+
+    constructor(string memory n) {
+        name = n;
+    }
+}
+
+contract p2 {
+    string p2name;
+
+    constructor(string memory n) {
+        p2name = n;
+    }
+}
+
+contract Child is p1, p2 {
+
+    string Cname;
+
+    constructor(
+        string memory n1,
+        string memory n2,
+        string memory n3
+    ) p1(n1) p2(n2) {
+
+        Cname = n3;
+    }
+
+    function disp()
+        public
+        view
+        returns (string memory, string memory, string memory)
+    {
+        return (name, p2name, Cname);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aim : online shopping system
+
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.21;
+
+contract Product {
+
+    uint pid;
+    uint price;
+    uint stock;
+    string pname;
+
+    constructor(
+        uint id,
+        uint p,
+        uint s,
+        string memory n
+    ) {
+        pid = id;
+        price = p;
+        stock = s;
+        pname = n;
+    }
+
+    function displayProduct()
+        public
+        view
+        returns (uint, uint, uint, string memory)
+    {
+        return (pid, price, stock, pname);
+    }
+}
+
+contract onlineShop is Product {
+
+    constructor(
+        uint _id,
+        uint _price,
+        uint _stock,
+        string memory _name
+    )
+    Product(_id, _price, _stock, _name)
+    {
+        // Parent constructor initialises product details
+    }
+
+    function makeSale(uint p_id, uint qtyToBuy) public {
+
+        require(p_id == pid, "Incorrect Product ID");
+
+        require(stock >= qtyToBuy, "Item out of stock");
+
+        stock -= qtyToBuy;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aim : student course registration
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.21;
+
+contract Person {
+
+    string public studentName;
+    uint public studId;
+
+    constructor(string memory n, uint id) {
+        studentName = n;
+        studId = id;
+    }
+}
+
+contract Student is Person {
+
+    string public courseName;
+    uint public courseFee;
+    uint public maxSeats;
+
+    uint public registeredSeats;
+
+    mapping(uint => bool) public registered;
+
+    constructor(
+        string memory n,
+        uint id,
+        string memory c,
+        uint fee,
+        uint seats
+    ) Person(n, id) {
+
+        courseName = c;
+        courseFee = fee;
+        maxSeats = seats;
+    }
+
+    function registerStudent() public {
+
+        require(
+            registeredSeats < maxSeats,
+            "seats are full"
+        );
+
+        require(
+            !registered[studId],
+            "already registered"
+        );
+
+        registered[studId] = true;
+        registeredSeats++;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aim : Vehicle Rental System with Function Overriding
+
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.21;
+
+contract Rental {
+    string public agencyName;
+
+    event VehicleRented(
+        string vehicleType,
+        uint daysRented,
+        uint totalRent
+    );
+
+    constructor(string memory name) {
+        agencyName = name;
+    }
+
+    function calculateRent(uint daysRented)
+        public
+        view
+        virtual
+        returns (uint)
+    {
+        return daysRented * 1000;
+    }
+}
+
+contract CarRental is Rental {
+
+    constructor(string memory name) Rental(name) {}
+
+    function calculateRent(uint daysRented)
+        public
+        view
+        override
+        returns (uint)
+    {
+        return daysRented * 2000;
+    }
+
+    function rentVehicle(uint daysRented) public {
+        uint rent = calculateRent(daysRented);
+        emit VehicleRented("Car", daysRented, rent);
+    }
+}
+
+contract BikeRental is Rental {
+
+    constructor(string memory name) Rental(name) {}
+
+    function calculateRent(uint daysRented)
+        public
+        view
+        override
+        returns (uint)
+    {
+        return daysRented * 500;
+    }
+
+    function rentVehicle(uint daysRented) public {
+        uint rent = calculateRent(daysRented);
+        emit VehicleRented("Bike", daysRented, rent);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aim : crowdfunding contracts
+
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.21;
+
+contract Crowdfunding {
+    address public owner;
+    uint public fundingGoal;
+    uint public deadline;
+    uint public totalFunds;
+
+    event ContributionReceived(address, uint);
+    event GoalReached(uint);
+
+    constructor(uint _fundingGoal, uint _duration) {
+        owner = msg.sender;
+        fundingGoal = _fundingGoal;
+        deadline = block.timestamp + _duration;
+    }
+
+    function dispo() public view returns (address) {
+        return owner;
+    }
+}
+
+contract CrowdfundingCampaign is Crowdfunding {
+
+    constructor(uint _fundingGoal, uint _duration)
+        Crowdfunding(_fundingGoal, _duration) {}
+
+    function contribute() public payable {
+        require(block.timestamp < deadline, "Campaign ended");
+        require(msg.value > 0, "Invalid contribution");
+
+        totalFunds += msg.value;
+
+        emit ContributionReceived(msg.sender, msg.value);
+
+        if (totalFunds >= fundingGoal) {
+            emit GoalReached(totalFunds);
+        }
+    }
+
+    function refund() public payable {
+        require(block.timestamp >= deadline, "Campaign not ended");
+        require(totalFunds < fundingGoal, "Goal reached");
+
+        uint amount = address(this).balance;
+        payable(msg.sender).transfer(amount);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
